@@ -1,8 +1,11 @@
 <template>
   <!--img alt="Vue logo" src="./assets/logo.png"-->
   <HelloWorld msg="Vue Test"/>
+  <div>
+    <button class="btn btn-primary" @click="toggleStocks">Magnificent 7</button>
+  </div>
   <!--BarChart /-->
-  <BarChart2 />
+  <BarChart2 v-if="showStocks" />
 </template>
 
 <script>
@@ -16,8 +19,18 @@ export default {
     HelloWorld,
     //BarChart,
     BarChart2
-  }
-}
+  },
+  data() {
+    return {
+      showStocks: false,
+    };
+  },
+  methods: {
+    toggleStocks() {
+      this.showStocks = !this.showStocks;
+    },
+  },
+};
 </script>
 
 <style>
