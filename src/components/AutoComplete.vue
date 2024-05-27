@@ -85,14 +85,14 @@
         this.query = suggestion.name;
         this.selectedTicker = suggestion.ticker;
         this.suggestions = [];
-        this.$emit('company-selected', suggestion.ticker);
+        this.$emit('company-selected', { ticker: suggestion.ticker, name: suggestion.name });
       },
       handleSubmit() {
         if (!this.selectedTicker) {
           alert('Please select a company from the suggestions.');
           return;
         }
-        this.$emit('ticker-selected', this.selectedTicker);
+        this.$emit('ticker-selected', { ticker: this.selectedTicker, name: this.query });
       },
     },
   };

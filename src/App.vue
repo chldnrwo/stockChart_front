@@ -5,9 +5,9 @@
     <button class="btn btn-primary btn-sm" @click="toggleStocks">Magnificent 7 YOY</button>
   </div>
   <br>
-    <AutoComplete @ticker-selected="handleTickerSelected" />
+    <AutoComplete @ticker-selected="handleCompanySelected" />
   <br>
-    <StockDetails v-if="selectedTicker" :ticker="selectedTicker" />
+    <StockDetails v-if="selectedTicker" :ticker="selectedTicker" :companyName="selectedCompanyName" />
     <BarChart2 v-if="showStocks" />
 </template>
 
@@ -28,16 +28,22 @@ export default {
   data() {
     return {
       showStocks: false,
-      selectedTicker: '', // 선택된 티커를 저장할 변수
+      selectedTicker: null, // 선택된 티커를 저장할 변수
+      selectedCompanyName: '', // 회사명
     };
   },
   methods: {
     toggleStocks() {
       this.showStocks = !this.showStocks;
+      if (this.showStocks) {
+        this.selectedTicker = null; // M7 차트가 표시될 때 개별 차트 숨기기
+        this.selectedCompanyName = '';
+      }
     },
-    handleTickerSelected(ticker) {
-      console.log(ticker);
+    handleCompanySelected({ ticker, name }) {
       this.selectedTicker = ticker; // 선택된 티커를 저장
+      this.selectedCompanyName = name; // 선택된 회사명을 저장
+      this.showStocks = false; // 개별 차트가 표시될 때 M7 차트 숨기기
     }
   },
 };

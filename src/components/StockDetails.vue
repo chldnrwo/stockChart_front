@@ -1,7 +1,5 @@
 <template>
     <div v-if="stockDetails">
-      <h3>Stock Details for {{ stockDetails.name }}</h3>
-      <p>Ticker: {{ stockDetails.ticker }}</p>
       <div class="chart-container">
         <canvas ref="canvas"></canvas>
       </div>
@@ -18,6 +16,10 @@
     name: 'StockDetails',
     props: {
       ticker: {
+        type: String,
+        required: true
+      },
+      companyName: {
         type: String,
         required: true
       }
@@ -71,7 +73,7 @@
           data: {
             labels: labels,
             datasets: [{
-              label: 'Stock Closing Price',
+              label: `${this.companyName} Closing Price`,
               backgroundColor: 'rgba(75, 192, 192, 0.2)',
               borderColor: 'rgba(75, 192, 192, 1)',
               borderWidth: 1,
