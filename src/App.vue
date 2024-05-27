@@ -4,60 +4,41 @@
   <div>
     <button class="btn btn-primary btn-sm" @click="toggleStocks">Magnificent 7 YOY</button>
   </div>
-  <div class="container mt-5">
-    <form>
-      <div class="row justify-content-center">
-        <!-- 간격을 위해 20%씩 양옆에 col 추가 -->
-        <div class="col-2"></div>
-        <div class="col-8">
-          <div class="row align-items-center">
-            <div class="col-3 d-flex align-items-center justify-content-end">
-              <label for="exampleInput" class="form-label mb-0">TICKER</label>
-            </div>
-            <div class="col-5">
-              <input type="text" class="form-control" id="exampleInput" placeholder="Enter Ticker">
-            </div>
-            <div class="col-2">
-              <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-2"></div>
-      </div>
-    </form>
-  </div>
   <br>
-
-  <AutoComplete @company-selected="fetchStockData" />
+    <AutoComplete @ticker-selected="handleTickerSelected" />
   <br>
-
-  <!--BarChart /-->
-  <BarChart2 v-if="showStocks" />
+    <StockDetails v-if="selectedTicker" :ticker="selectedTicker" />
+    <BarChart2 v-if="showStocks" />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-//import BarChart from './components/BarChart.vue';
+import HelloWorld from './components/HelloWorld.vue';
 import BarChart2 from './components/BarChart2.vue';
 import AutoComplete from './components/AutoComplete.vue';
+import StockDetails from './components/StockDetails.vue';
 
 export default {
   name: 'App',
   components: {
     HelloWorld,
-    //BarChart,
     BarChart2,
-    AutoComplete
+    AutoComplete,
+    StockDetails
   },
   data() {
     return {
       showStocks: false,
+      selectedTicker: '', // 선택된 티커를 저장할 변수
     };
   },
   methods: {
     toggleStocks() {
       this.showStocks = !this.showStocks;
     },
+    handleTickerSelected(ticker) {
+      console.log(ticker);
+      this.selectedTicker = ticker; // 선택된 티커를 저장
+    }
   },
 };
 </script>

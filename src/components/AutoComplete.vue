@@ -1,22 +1,40 @@
 <template>
-    <div class="autocomplete-container">
-      <input
-        type="text"
-        class="form-control"
-        v-model="query"
-        @input="onInput"
-        placeholder="Enter company name"
-      />
-      <ul v-if="suggestions.length" class="list-group">
-        <li
-          class="list-group-item"
-          v-for="suggestion in suggestions"
-          :key="suggestion.ticker"
-          @click="selectSuggestion(suggestion)"
-        >
-          {{ suggestion.name }}
-        </li>
-      </ul>
+    <div class="container mt-5">
+      <form @submit.prevent="handleSubmit">
+        <div class="row justify-content-center">
+          <div class="col-2"></div>
+          <div class="col-8">
+            <div class="row align-items-center">
+              <div class="col-3 d-flex align-items-center justify-content-end">
+                <label for="exampleInput" class="form-label mb-0">TICKER</label>
+              </div>
+              <div class="col-5 autocomplete-container">
+                <input
+                  type="text"
+                  class="form-control"
+                  v-model="query"
+                  @input="onInput"
+                  placeholder="Enter company name"
+                />
+                <ul v-if="suggestions.length" class="list-group">
+                  <li
+                    class="list-group-item"
+                    v-for="suggestion in suggestions"
+                    :key="suggestion.ticker"
+                    @click="selectSuggestion(suggestion)"
+                  >
+                    {{ suggestion.name }}
+                  </li>
+                </ul>
+              </div>
+              <div class="col-2">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-2"></div>
+        </div>
+      </form>
     </div>
   </template>
   
@@ -24,11 +42,12 @@
   import axios from 'axios';
   
   export default {
-    name: 'StockAutocomplete',
+    name: 'AutoComplete',
     data() {
       return {
         query: '',
         suggestions: [],
+        selectedTicker: '',
       };
     },
     methods: {
@@ -46,28 +65,34 @@
               q: this.query
             }
           });
-
-            // response.data는 전체 응답 객체이므로, 실제 데이터는 response.data.body에 있음
-            let data = response.data.body;
-
-            // 응답이 JSON 문자열일 경우 파싱
-            if (typeof data === 'string') {
+  
+          let data = response.data.body;
+  
+          if (typeof data === 'string') {
             data = JSON.parse(data);
-            }
-
-            if (Array.isArray(data)) {
-            this.suggestions = data.slice(0, 8); // 상위 8개 결과만 사용
-            } else {
+          }
+  
+          if (Array.isArray(data)) {
+            this.suggestions = data.slice(0, 8);
+          } else {
             console.error('Unexpected response format:', data);
-            }
+          }
         } catch (error) {
-            console.error('Error fetching suggestions:', error);
+          console.error('Error fetching suggestions:', error);
         }
       },
       selectSuggestion(suggestion) {
         this.query = suggestion.name;
+        this.selectedTicker = suggestion.ticker;
         this.suggestions = [];
         this.$emit('company-selected', suggestion.ticker);
+      },
+      handleSubmit() {
+        if (!this.selectedTicker) {
+          alert('Please select a company from the suggestions.');
+          return;
+        }
+        this.$emit('ticker-selected', this.selectedTicker);
       },
     },
   };
