@@ -1,5 +1,10 @@
 <template>
-    <div v-if="stockDetails">
+    <div v-if="stockDetails">  
+      <div class="row justify-content-center">
+        <div class="col-1"></div>
+        <div class="col-9"></div>
+        <div class="col-1"></div>  
+      </div>
       <div class="chart-container">
         <canvas ref="canvas"></canvas>
       </div>
@@ -47,7 +52,7 @@
         } catch (error) {
           console.error('Error fetching stock details:', error);
         }
-      },
+      },    
       renderChart() {
         if (this.chart) {
           this.chart.destroy(); // 기존 차트를 파괴하여 메모리 누수를 방지합니다.
@@ -61,7 +66,7 @@
   
         const labels = this.stockDetails.map(data => data.date);
         const data = this.stockDetails.map(data => data.close);
-  
+
         const ctx = this.$refs.canvas.getContext('2d');
         if (!ctx) {
           console.error('Canvas context not found');
